@@ -131,4 +131,19 @@ LineByLine.prototype.next = function() {
     return line;
 };
 
+if(Symbol.iterator) {
+    LineByLine.prototype[Symbol.iterator] = function() {
+        var that = this;
+        return {
+            next: function() {
+                var lineContents = that.next();
+                if(lineContents !== false) {
+                    return {value: lineContents, done: false};
+                }
+                return {value: undefined, done: true};
+            }
+        };
+    };
+}
+
 module.exports = LineByLine;
